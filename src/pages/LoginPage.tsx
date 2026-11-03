@@ -4,7 +4,9 @@ import { Button, Field } from '../components/ui'
 
 function errorMessage(err: unknown): string {
   const message = err instanceof Error ? err.message : String(err)
-  if (/rate limit|security purposes/i.test(message)) return 'Troppe richieste: aspetta qualche minuto e riprova.'
+  if (/rate limit|security purposes/i.test(message)) {
+    return 'Troppe email di accesso richieste: riprova più tardi, oppure usa il codice di un’email ricevuta nell’ultima ora.'
+  }
   if (/expired|invalid/i.test(message)) return 'Codice non valido o scaduto. Richiedi una nuova email.'
   return message
 }
@@ -78,13 +80,24 @@ export function LoginPage({ client }: { client: SupabaseClient }) {
               <Button type="submit" variant="primary" className="w-full" disabled={busy}>
                 {busy ? 'Invio…' : 'Inviami il link di accesso'}
               </Button>
+              <Button
+                variant="ghost"
+                className="w-full"
+                disabled={!email.includes('@')}
+                onClick={() => {
+                  setSent(true)
+                  setError(null)
+                }}
+              >
+                Ho già un codice
+              </Button>
               <p className="text-center text-xs text-slate-500 dark:text-slate-400">Niente password da ricordare.</p>
             </form>
           ) : (
             <form onSubmit={verifyCode} className="space-y-4">
               <p className="text-sm text-slate-600 dark:text-slate-300">
-                Abbiamo inviato un'email a <strong>{email}</strong>. Apri il link da questo dispositivo, oppure scrivi
-                qui il codice che trovi nell'email.
+                Scrivi il codice che trovi nell'email inviata a <strong>{email}</strong>, oppure apri il link
+                dell'email da questo dispositivo.
               </p>
               <Field label="Codice">
                 <input
