@@ -9,7 +9,7 @@
     <script>
       // Applica il tema prima del render per evitare il flash
       try {
-        var t = JSON.parse(localStorage.getItem('habit-tracker:v1') || '{}').settings?.theme || 'system';
+        var t = localStorage.getItem('habit-tracker:theme') || 'system';
         var dark = t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
         if (dark) document.documentElement.classList.add('dark');
       } catch (e) {}

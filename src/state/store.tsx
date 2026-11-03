@@ -2,7 +2,7 @@ import { type ReactNode, createContext, useCallback, useContext, useEffect, useM
 import { type AppData, type EntryData, type Habit, type ThemePref, entryKey } from '../types'
 import { type ISODate, todayISO } from '../lib/dates'
 import { newId } from '../lib/id'
-import { createInitialData, storage } from '../storage'
+import { type StorageAdapter, createInitialData } from '../storage'
 
 export type HabitDraft = Omit<Habit, 'id' | 'order' | 'archived' | 'createdAt'>
 
@@ -52,30 +52,71 @@ function useToday(): ISODate {
   return today
 }
 
-export function StoreProvider({ children }: { children: ReactNode }) {
+/** Al primo avvio su un account vuoto: usare i dati già presenti sul dispositivo? */
+function askToImport(local: AppData): boolean {
+  const entries = Object.keys(local.entries).length
+  if (entries === 0) return false
+  return confirm(
+    `Su questo dispositivo ci sono ${local.habits.length} abitudini e ${entries} registrazioni. ` +
+      'Vuoi caricarle nel tuo account? Altrimenti si parte dalle abitudini iniziali.',
+  )
+}
+
+export function StoreProvider({
+  storage,
+  importFrom,
+  children,
+}: {
+  storage: StorageAdapter
+  /** Dati da proporre se `storage` è vuoto (es. il salvataggio locale al primo login) */
+  importFrom?: StorageAdapter
+  children: ReactNode
+}) {
   const [data, setData] = useState<AppData | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const today = useToday()
 
   useEffect(() => {
+    let cancelled = false
     storage
       .load()
       .then(async (loaded) => {
+        if (cancelled) return
         if (loaded) return setData(loaded)
-        const initial = createInitialData(todayISO())
+        const local = importFrom ? await importFrom.load().catch(() => null) : null
+        const initial = local && askToImport(local) ? local : createInitialData(todayISO())
         await storage.replaceAll(initial)
-        setData(initial)
+        if (!cancelled) setData(initial)
       })
       .catch((err) => {
         console.error(err)
-        setLoadError(String(err?.message ?? err))
+        if (!cancelled) setLoadError(String(err?.message ?? err))
       })
-  }, [])
+    return () => {
+      cancelled = true
+    }
+  }, [storage, importFrom])
 
-  const saveHabits = useCallback((changed: Habit[]) => {
-    setData((d) => d && { ...d, habits: d.habits.map((h) => changed.find((c) => c.id === h.id) ?? h) })
-    storage.saveHabits(changed).catch(reportError)
-  }, [])
+  // Tornando sull'app si ricaricano i dati: possono essere cambiati da un altro dispositivo
+  useEffect(() => {
+    const refresh = () => {
+      if (document.visibilityState !== 'visible') return
+      storage
+        .load()
+        .then((loaded) => loaded && setData(loaded))
+        .catch(console.error)
+    }
+    document.addEventListener('visibilitychange', refresh)
+    return () => document.removeEventListener('visibilitychange', refresh)
+  }, [storage])
+
+  const saveHabits = useCallback(
+    (changed: Habit[]) => {
+      setData((d) => d && { ...d, habits: d.habits.map((h) => changed.find((c) => c.id === h.id) ?? h) })
+      storage.saveHabits(changed).catch(reportError)
+    },
+    [storage],
+  )
 
   const store = useMemo<Store | null>(() => {
     if (!data) return null
@@ -189,7 +230,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         storage.replaceAll(initial).catch(reportError)
       },
     }
-  }, [data, today, saveHabits])
+  }, [data, today, saveHabits, storage])
 
   if (loadError) {
     return (

@@ -1,9 +1,6 @@
-import { createLocalStorageAdapter } from './localStorage'
-import type { StorageAdapter } from './types'
-
-/** Unico punto da cambiare per passare a Supabase in Fase 2. */
-export const storage: StorageAdapter = createLocalStorageAdapter()
-
+// Unico punto di accesso ai dati: il resto dell'app vede solo StorageAdapter.
 export type { StorageAdapter } from './types'
+export { createLocalStorageAdapter } from './localStorage'
+export { createSupabaseAdapter } from './supabase'
 export { createInitialData } from './seed'
 export { exportJson, parseBackup, InvalidBackupError } from './backup'

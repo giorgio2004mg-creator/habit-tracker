@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import type { ThemePref } from '../types'
 
+export const THEME_KEY = 'habit-tracker:theme'
+
 /** Applica la classe `dark` a <html> seguendo la preferenza (o il sistema). */
 export function useApplyTheme(pref: ThemePref) {
   useEffect(() => {
@@ -11,6 +13,12 @@ export function useApplyTheme(pref: ThemePref) {
       document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#0b1120' : '#f8fafc')
     }
     apply()
+    // Copia locale letta da index.html prima del caricamento dei dati, per evitare il lampo di tema
+    try {
+      localStorage.setItem(THEME_KEY, pref)
+    } catch {
+      // storage non disponibile: pazienza, solo un lampo all'avvio
+    }
     media.addEventListener('change', apply)
     return () => media.removeEventListener('change', apply)
   }, [pref])

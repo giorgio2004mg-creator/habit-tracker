@@ -3,10 +3,12 @@ import { DownloadIcon, UploadIcon } from '../components/icons'
 import { Button, PageHeader, SectionTitle, Segmented } from '../components/ui'
 import type { ThemePref } from '../types'
 import { exportJson, InvalidBackupError, parseBackup } from '../storage'
+import { useAuth } from '../state/auth'
 import { useStore } from '../state/store'
 
 export function SettingsPage() {
   const store = useStore()
+  const auth = useAuth()
   const fileInput = useRef<HTMLInputElement>(null)
   const [message, setMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null)
 
@@ -51,6 +53,24 @@ export function SettingsPage() {
       <PageHeader title="Impostazioni" />
 
       <div className="space-y-6">
+        {auth && (
+          <section className="card p-4">
+            <SectionTitle>Account</SectionTitle>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="min-w-0 text-sm text-slate-600 dark:text-slate-400">
+                Collegato come <strong className="break-all text-slate-900 dark:text-slate-100">{auth.email}</strong>
+              </p>
+              <Button
+                onClick={() => {
+                  if (confirm('Uscire dall\'account? I dati restano salvati online.')) auth.signOut()
+                }}
+              >
+                Esci
+              </Button>
+            </div>
+          </section>
+        )}
+
         <section className="card p-4">
           <SectionTitle>Tema</SectionTitle>
           <Segmented<ThemePref>
@@ -67,8 +87,9 @@ export function SettingsPage() {
         <section className="card p-4">
           <SectionTitle>Backup dei dati</SectionTitle>
           <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
-            I dati sono salvati solo su questo dispositivo ({store.data.habits.length} abitudini, {entriesCount}{' '}
-            registrazioni). Esporta un file JSON per fare un backup o spostarli su un altro dispositivo.
+            {auth
+              ? `I dati sono sincronizzati con il tuo account (${store.data.habits.length} abitudini, ${entriesCount} registrazioni). Esporta un file JSON per avere una copia di sicurezza.`
+              : `I dati sono salvati solo su questo dispositivo (${store.data.habits.length} abitudini, ${entriesCount} registrazioni). Esporta un file JSON per fare un backup o spostarli su un altro dispositivo.`}
           </p>
           <div className="flex flex-wrap gap-2">
             <Button variant="primary" onClick={download}>
