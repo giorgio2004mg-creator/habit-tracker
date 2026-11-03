@@ -5,3 +5,6 @@ dist
 
 # Dati personali (backup, import)
 dati/
+
+.vercel
+.env*

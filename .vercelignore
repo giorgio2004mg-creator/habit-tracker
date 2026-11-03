@@ -1,0 +1,7 @@
+# Dati personali: non devono mai finire online
+dati/
+.claude/
+node_modules/
+dist/
+.env*
+.vercel/
