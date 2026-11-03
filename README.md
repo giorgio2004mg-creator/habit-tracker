@@ -2,6 +2,8 @@
 
 App personale per tracciare abitudini, sonno e pasti. Pensata per il telefono, comoda anche su desktop.
 
+**Prova l'app:** https://habit-tracker-eta-three-88.vercel.app
+
 > **Stato:** Fase 1 — app completa con dati salvati sul dispositivo ed export/import JSON.
 
 ## Funzionalità
