@@ -189,8 +189,8 @@ function HabitKpi({ habit, app, from, to }: { habit: Habit; app: AppData; from: 
       return (
         <Kpi
           label={`${habit.icon} ${habit.name}`}
-          value={s.average === null ? '—' : `${formatOneDecimal(s.average)} / 4`}
-          hint="pasti fatti al giorno"
+          value={s.average === null ? '—' : formatOneDecimal(s.average)}
+          hint={`pasti fatti al giorno (obiettivo ${habit.target ?? 4})`}
         />
       )
     default:
