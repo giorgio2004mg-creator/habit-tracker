@@ -23,6 +23,9 @@ import { useStore } from '../state/store'
 
 type Period = 'week' | 'month'
 
+/** Rispetta l'impostazione di sistema "riduci movimento" */
+const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
 function periodRange(period: Period, anchor: ISODate): [ISODate, ISODate] {
   return period === 'week' ? [startOfWeek(anchor), endOfWeek(anchor)] : [startOfMonth(anchor), endOfMonth(anchor)]
 }
@@ -109,7 +112,7 @@ export function StatsPage() {
                   )
                 }}
               />
-              <Bar dataKey="value" fill="#10b981" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="#10b981" radius={[4, 4, 0, 0]} isAnimationActive={!reduceMotion()} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -270,7 +273,7 @@ function HabitChart({
                 ifOverflow="extendDomain"
               />
             ) : null}
-            <Bar dataKey="value" fill={habit.color} radius={[4, 4, 0, 0]} />
+            <Bar dataKey="value" fill={habit.color} radius={[4, 4, 0, 0]} isAnimationActive={!reduceMotion()} />
           </BarChart>
         </ResponsiveContainer>
       </div>

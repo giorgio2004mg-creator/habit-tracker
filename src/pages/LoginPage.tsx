@@ -132,6 +132,13 @@ export function LoginPage({ client }: { client: SupabaseClient }) {
             </p>
           )}
         </div>
+
+        <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+          Vuoi solo dare un'occhiata?{' '}
+          <a href="/?demo#/oggi" className="font-semibold text-emerald-600 underline-offset-2 hover:underline dark:text-emerald-400">
+            Prova la demo senza account
+          </a>
+        </p>
       </div>
     </main>
   )

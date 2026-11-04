@@ -8,8 +8,11 @@ import { useStore } from './state/store'
 import { type Route, useRoute } from './state/useRoute'
 import { useApplyTheme } from './state/useTheme'
 
-// Recharts pesa: le statistiche si caricano solo quando servono
-const StatsPage = lazy(() => import('./pages/StatsPage').then((m) => ({ default: m.StatsPage })))
+// Recharts pesa: le statistiche si scaricano dopo l'avvio, senza rallentarlo.
+// Il precaricamento le mette anche nella cache offline del service worker.
+const loadStats = () => import('./pages/StatsPage').then((m) => ({ default: m.StatsPage }))
+const StatsPage = lazy(loadStats)
+window.addEventListener('load', () => setTimeout(loadStats, 2000), { once: true })
 
 const PAGES: Record<Route, ComponentType> = {
   oggi: TodayPage,

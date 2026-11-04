@@ -11,3 +11,10 @@ createRoot(document.getElementById('root')!).render(
     </DataRoot>
   </StrictMode>,
 )
+
+// Solo in produzione: in sviluppo la cache nasconderebbe le modifiche
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((err) => console.error('Service worker non registrato', err))
+  })
+}

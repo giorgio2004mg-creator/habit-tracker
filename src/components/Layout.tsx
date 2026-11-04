@@ -1,6 +1,8 @@
 import type { ComponentType, ReactNode, SVGProps } from 'react'
 import type { Route } from '../state/useRoute'
 import { CalendarIcon, ChartIcon, GearIcon, ListIcon, SunIcon } from './icons'
+import { DemoBanner } from './DemoBanner'
+import { OfflineBanner } from './OfflineBanner'
 import { cx } from './ui'
 
 const NAV: { route: Route; label: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
@@ -40,7 +42,11 @@ export function Layout({ route, children }: { route: Route; children: ReactNode 
         </nav>
       </aside>
 
-      <main className="mx-auto w-full max-w-3xl px-4 pt-6 pb-28 md:px-8 md:pt-10 md:pb-12">{children}</main>
+      <main className="mx-auto w-full max-w-3xl px-4 pt-6 pb-28 md:px-8 md:pt-10 md:pb-12">
+        <DemoBanner />
+        <OfflineBanner />
+        {children}
+      </main>
 
       {/* Barra in basso (mobile) */}
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/90 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden dark:border-slate-800 dark:bg-slate-900/90">
