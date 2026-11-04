@@ -11,6 +11,14 @@ function errorMessage(err: unknown): string {
   return message
 }
 
+/**
+ * App aggiunta alla schermata Home: ha uno spazio separato dal browser,
+ * quindi il link dell'email (che si apre nel browser) non le fa fare l'accesso.
+ */
+const installed =
+  window.matchMedia('(display-mode: standalone)').matches ||
+  (navigator as Navigator & { standalone?: boolean }).standalone === true
+
 /** Accesso senza password: link o codice via email. */
 export function LoginPage({ client }: { client: SupabaseClient }) {
   const [email, setEmail] = useState('')
@@ -96,8 +104,17 @@ export function LoginPage({ client }: { client: SupabaseClient }) {
           ) : (
             <form onSubmit={verifyCode} className="space-y-4">
               <p className="text-sm text-slate-600 dark:text-slate-300">
-                Scrivi il codice che trovi nell'email inviata a <strong>{email}</strong>, oppure apri il link
-                dell'email da questo dispositivo.
+                {installed ? (
+                  <>
+                    Scrivi qui il codice che trovi nell'email inviata a <strong>{email}</strong>. Non usare il link:
+                    si aprirebbe nel browser e l'accesso non arriverebbe a questa app.
+                  </>
+                ) : (
+                  <>
+                    Scrivi il codice che trovi nell'email inviata a <strong>{email}</strong>, oppure apri il link
+                    dell'email da questo dispositivo.
+                  </>
+                )}
               </p>
               <Field label="Codice">
                 <input
