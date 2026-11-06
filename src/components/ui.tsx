@@ -94,14 +94,79 @@ export function Segmented<T extends string | number>({
   )
 }
 
-export function ProgressBar({ value, color }: { value: number; color: string }) {
+export function ProgressBar({ value, color, glow = false }: { value: number; color: string; glow?: boolean }) {
   return (
-    <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+    <div className={cx('h-2 rounded-full bg-slate-100', glow ? 'dark:bg-white/[0.07]' : 'overflow-hidden dark:bg-slate-800')}>
       <div
         className="h-full rounded-full transition-[width] duration-300"
-        style={{ width: `${Math.min(100, Math.max(0, value * 100))}%`, backgroundColor: color }}
+        style={{
+          width: `${Math.min(100, Math.max(0, value * 100))}%`,
+          backgroundColor: color,
+          boxShadow: glow && value > 0 ? `0 0 12px ${color}88` : undefined,
+        }}
       />
     </div>
+  )
+}
+
+/** Anello di avanzamento (0–1) con contenuto al centro. */
+export function ProgressRing({
+  value,
+  color,
+  size = 44,
+  stroke = 4,
+  dashed = false,
+  label,
+  className,
+  children,
+}: {
+  value: number
+  color: string
+  size?: number
+  stroke?: number
+  /** Traccia tratteggiata (giorni futuri) */
+  dashed?: boolean
+  label?: string
+  className?: string
+  children?: ReactNode
+}) {
+  const r = (size - stroke) / 2
+  const c = 2 * Math.PI * r
+  const v = Math.min(1, Math.max(0, value))
+  return (
+    <span
+      className={cx('relative inline-flex shrink-0 items-center justify-center', className)}
+      style={{ width: size, height: size }}
+      role={label ? 'img' : undefined}
+      aria-label={label}
+    >
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="absolute inset-0 -rotate-90" aria-hidden="true">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          fill="none"
+          strokeWidth={stroke}
+          strokeDasharray={dashed ? '2 3' : undefined}
+          className="stroke-slate-200 dark:stroke-white/10"
+        />
+        {v > 0 && (
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={r}
+            fill="none"
+            stroke={color}
+            strokeWidth={stroke}
+            strokeLinecap="round"
+            strokeDasharray={c}
+            strokeDashoffset={c * (1 - v)}
+            style={{ transition: 'stroke-dashoffset 0.4s ease' }}
+          />
+        )}
+      </svg>
+      <span className="relative flex items-center justify-center">{children}</span>
+    </span>
   )
 }
 

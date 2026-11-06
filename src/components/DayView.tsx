@@ -20,7 +20,7 @@ export function DayView({ date }: { date: ISODate }) {
 
   if (store.habits.length === 0) {
     return (
-      <div className="card p-6 text-center text-sm text-slate-500 dark:text-slate-400">
+      <div className="hcard p-6 text-center text-sm text-slate-500 dark:text-slate-400">
         Nessuna abitudine attiva. <a href="#/abitudini" className="font-medium text-emerald-600 underline">Creane una</a>.
       </div>
     )
@@ -29,7 +29,7 @@ export function DayView({ date }: { date: ISODate }) {
   return (
     <div className="space-y-6">
       {naDay && (
-        <div className="flex items-center gap-3 rounded-2xl bg-slate-200/70 px-4 py-3 text-sm dark:bg-slate-800">
+        <div className="flex items-center gap-3 rounded-3xl bg-slate-200/70 px-4 py-3 text-sm dark:bg-white/[0.06]">
           <PauseIcon className="shrink-0 text-xl text-slate-500" />
           <div className="flex-1">
             <p className="font-semibold">Giornata non applicabile{naDay.note ? ` · ${naDay.note}` : ''}</p>
@@ -46,7 +46,7 @@ export function DayView({ date }: { date: ISODate }) {
           <HabitCard key={h.id} habit={h} date={date} />
         ))}
         {due.length === 0 && (
-          <p className="card p-5 text-center text-sm text-slate-500 dark:text-slate-400">
+          <p className="hcard p-5 text-center text-sm text-slate-500 dark:text-slate-400">
             Nessuna abitudine prevista per questo giorno.
           </p>
         )}
@@ -76,7 +76,7 @@ export function DayView({ date }: { date: ISODate }) {
       {!naDay && (
         <div className="text-center">
           {askReason ? (
-            <div className="card inline-flex flex-wrap items-center justify-center gap-2 p-3">
+            <div className="hcard inline-flex flex-wrap items-center justify-center gap-2 p-3">
               <span className="text-sm text-slate-600 dark:text-slate-300">Motivo:</span>
               {NA_REASONS.map((r) => (
                 <Button

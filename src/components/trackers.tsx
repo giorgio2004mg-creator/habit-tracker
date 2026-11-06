@@ -27,10 +27,12 @@ export function CheckTracker({ habit, data, onChange }: TrackerProps<'check'>) {
         onClick={() => update({ done: !done, note: data?.note })}
         aria-pressed={done}
         className={cx(
-          'inline-flex shrink-0 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition',
-          done ? 'text-white shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200',
+          'inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold transition',
+          done
+            ? 'text-white'
+            : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-white/[0.06] dark:text-slate-200 dark:hover:bg-white/10',
         )}
-        style={done ? { backgroundColor: habit.color } : undefined}
+        style={done ? { backgroundColor: habit.color, boxShadow: `0 4px 18px -4px ${habit.color}aa` } : undefined}
       >
         <CheckIcon className="text-base" />
         {done ? 'Fatto' : 'Segna come fatto'}
@@ -55,15 +57,22 @@ export function QuantityTracker({ habit, data, onChange }: TrackerProps<'quantit
     <div className="space-y-3">
       <div className="flex items-baseline justify-between text-sm">
         <span>
-          <span className="text-xl font-bold">{formatNumber(value)}</span>
-          <span className="text-slate-500 dark:text-slate-400">
+          <span className="text-3xl font-bold tracking-tight tabular-nums" style={{ color: habit.color }}>
+            {formatNumber(value)}
+          </span>
+          <span className="text-base font-medium text-slate-400 dark:text-slate-500">
             {habit.target ? ` / ${formatNumber(habit.target)}` : ''} {unit}
           </span>
         </span>
       </div>
-      {habit.target ? <ProgressBar value={progressOf(habit, data)} color={habit.color} /> : null}
+      {habit.target ? <ProgressBar value={progressOf(habit, data)} color={habit.color} glow /> : null}
       <div className="flex items-center gap-2">
-        <IconButton label={`Togli ${formatNumber(step)} ${unit}`} onClick={() => set(value - step)} disabled={value <= 0}>
+        <IconButton
+          label={`Togli ${formatNumber(step)} ${unit}`}
+          onClick={() => set(value - step)}
+          disabled={value <= 0}
+          className="bg-slate-100 dark:bg-white/[0.06]"
+        >
           <MinusIcon />
         </IconButton>
         <NumberInput
@@ -73,7 +82,12 @@ export function QuantityTracker({ habit, data, onChange }: TrackerProps<'quantit
           aria-label={`Quantità (${unit})`}
           placeholder="0"
         />
-        <Button variant="primary" className="flex-1" onClick={() => set(value + step)} style={{ backgroundColor: habit.color }}>
+        <Button
+          variant="primary"
+          className="flex-1 rounded-2xl py-2.5"
+          onClick={() => set(value + step)}
+          style={{ backgroundColor: habit.color, boxShadow: `0 4px 18px -6px ${habit.color}aa` }}
+        >
           <PlusIcon />
           {formatNumber(step)} {unit}
         </Button>
@@ -118,13 +132,15 @@ export function DurationTracker({ habit, data, onChange }: TrackerProps<'durata'
           ))}
         </div>
         {minutes > 0 && (
-          <span className="ml-auto text-sm font-medium text-slate-600 dark:text-slate-300">
-            {formatMinutes(minutes)}
+          <span className="ml-auto text-sm text-slate-400 dark:text-slate-500">
+            <span className="text-lg font-bold tabular-nums" style={{ color: habit.color }}>
+              {formatMinutes(minutes)}
+            </span>
             {habit.target ? ` / ${formatMinutes(habit.target)}` : ''}
           </span>
         )}
       </div>
-      {habit.target ? <ProgressBar value={progressOf(habit, data)} color={habit.color} /> : null}
+      {habit.target ? <ProgressBar value={progressOf(habit, data)} color={habit.color} glow /> : null}
       <CommitInput
         value={data?.topic ?? ''}
         onCommit={(topic) => set({ minutes, topic: topic.trim() || undefined })}
@@ -173,11 +189,13 @@ export function SleepTracker({ habit, data, onChange }: TrackerProps<'sonno'>) {
       </div>
       {minutes !== null && (
         <div className="space-y-1.5">
-          <div className="flex justify-between text-sm">
-            <span className="font-semibold">{formatMinutes(minutes)}</span>
+          <div className="flex items-baseline justify-between text-sm">
+            <span className="text-lg font-bold tabular-nums" style={{ color: habit.color }}>
+              {formatMinutes(minutes)}
+            </span>
             <span className="text-slate-500 dark:text-slate-400">obiettivo {formatNumber(target)} h</span>
           </div>
-          <ProgressBar value={progressOf(habit, data)} color={habit.color} />
+          <ProgressBar value={progressOf(habit, data)} color={habit.color} glow />
         </div>
       )}
     </div>
@@ -209,14 +227,14 @@ export function MealsTracker({ habit, data, onChange }: TrackerProps<'pasti'>) {
   }
 
   return (
-    <ul className="divide-y divide-slate-100 dark:divide-slate-800">
+    <ul className="divide-y divide-slate-100 dark:divide-white/[0.06]">
       {MEAL_SLOTS.map((slot) => {
         const log = meals[slot]
         const expanded = open === slot && !!log
         const toggleStatus = (status: MealLog['status']) =>
           setSlot(slot, log?.status === status ? undefined : { ...log, status })
         return (
-          <li key={slot} className="py-2 first:pt-0 last:pb-0">
+          <li key={slot} className="py-2.5 first:pt-0 last:pb-0">
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -240,10 +258,10 @@ export function MealsTracker({ habit, data, onChange }: TrackerProps<'pasti'>) {
                 onClick={() => toggleStatus('fatto')}
                 aria-pressed={log?.status === 'fatto'}
                 className={cx(
-                  'inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition',
+                  'inline-flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-semibold transition',
                   log?.status === 'fatto'
                     ? 'text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300',
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:bg-white/10',
                 )}
                 style={log?.status === 'fatto' ? { backgroundColor: habit.color } : undefined}
               >
@@ -254,10 +272,10 @@ export function MealsTracker({ habit, data, onChange }: TrackerProps<'pasti'>) {
                 onClick={() => toggleStatus('saltato')}
                 aria-pressed={log?.status === 'saltato'}
                 className={cx(
-                  'inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition',
+                  'inline-flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-semibold transition',
                   log?.status === 'saltato'
                     ? 'bg-slate-600 text-white dark:bg-slate-500'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300',
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:bg-white/10',
                 )}
               >
                 <XIcon /> Saltato

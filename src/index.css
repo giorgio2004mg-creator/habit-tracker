@@ -37,6 +37,16 @@ input[type='number'] {
   @apply rounded-2xl border border-slate-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900;
 }
 
+/* Card della home: più arrotondate, ombra morbida, superficie grafite in tema scuro */
+@utility hcard {
+  @apply rounded-3xl border border-slate-200/70 bg-white shadow-[0_1px_2px_rgb(15_23_42/0.04),0_10px_30px_-18px_rgb(15_23_42/0.25)] dark:border-white/[0.06] dark:bg-[#141922] dark:bg-linear-to-b dark:from-[#181e29] dark:to-[#12161e] dark:shadow-none;
+}
+
+/* Campi di testo dentro le card della home: più discreti */
+.hcard .field {
+  @apply border-slate-200/70 bg-slate-50/80 dark:border-white/10 dark:bg-white/[0.04];
+}
+
 /* Giorni non applicabili nel calendario */
 @utility hatched {
   background-image: repeating-linear-gradient(
