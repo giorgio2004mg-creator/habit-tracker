@@ -1,9 +1,49 @@
 @import 'tailwindcss';
 
+/* Caratteri inclusi nel progetto (funzionano anche offline) */
+@import '@fontsource/dm-mono/latin-400.css';
+@import '@fontsource/dm-mono/latin-500.css';
+@import '@fontsource/doto/latin-700.css';
+@import '@fontsource/instrument-serif/latin-400-italic.css';
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  /* Numeri giganti a puntini, come un display */
+  --font-dot: 'Doto', 'DM Mono', ui-monospace, monospace;
+  /* Titoli in corsivo con grazie */
+  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+
+  /* Grigio caldo "da strumento": dal fondo chiaro al nero inchiostro */
+  --color-ink-50: #e8e8e3;
+  --color-ink-100: #dededa;
+  --color-ink-200: #cfd0ca;
+  --color-ink-300: #b4b5af;
+  --color-ink-400: #8d8e88;
+  --color-ink-500: #6b6c67;
+  --color-ink-600: #51524e;
+  --color-ink-700: #3a3b38;
+  --color-ink-800: #272826;
+  --color-ink-900: #1a1a19;
+  --color-ink-950: #0f0f0e;
+
+  /* Unico colore di accento: arancio */
+  --color-accent-50: #fff2ec;
+  --color-accent-100: #ffe0d3;
+  --color-accent-200: #ffc0a6;
+  --color-accent-300: #ff9a74;
+  --color-accent-400: #ff7246;
+  --color-accent-500: #ff4f1f;
+  --color-accent-600: #e8400f;
+  --color-accent-700: #c2320a;
+  --color-accent-800: #9b2a0e;
+  --color-accent-900: #7d2410;
+  --color-accent-950: #440f05;
+
+  /* Superficie delle card in tema chiaro */
+  --color-paper: #f6f6f2;
 }
 
 :root {
@@ -16,7 +56,7 @@
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  @apply bg-ink-50 text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100;
 }
 
 /* Input numerici senza frecce */
@@ -30,28 +70,29 @@ input[type='number'] {
 }
 
 @utility field {
-  @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100;
+  @apply w-full rounded-2xl border border-ink-200 bg-white/70 px-3.5 py-2 text-sm text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-ink-900 focus:ring-2 focus:ring-ink-900/10 disabled:opacity-50 dark:border-white/10 dark:bg-white/[0.04] dark:text-ink-100 dark:focus:border-ink-100 dark:focus:ring-white/10;
 }
 
+/* Card: superficie piatta, angoli molto arrotondati, niente ombre */
 @utility card {
-  @apply rounded-2xl border border-slate-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900;
+  @apply rounded-[28px] bg-paper dark:bg-ink-900;
 }
 
-/* Card della home: più arrotondate, ombra morbida, superficie grafite in tema scuro */
+/* Card della home (stessa superficie delle altre) */
 @utility hcard {
-  @apply rounded-3xl border border-slate-200/70 bg-white shadow-[0_1px_2px_rgb(15_23_42/0.04),0_10px_30px_-18px_rgb(15_23_42/0.25)] dark:border-white/[0.06] dark:bg-[#141922] dark:bg-linear-to-b dark:from-[#181e29] dark:to-[#12161e] dark:shadow-none;
+  @apply rounded-[28px] bg-paper dark:bg-ink-900;
 }
 
-/* Campi di testo dentro le card della home: più discreti */
-.hcard .field {
-  @apply border-slate-200/70 bg-slate-50/80 dark:border-white/10 dark:bg-white/[0.04];
+/* Etichetta da strumento: mono, maiuscola, spaziata */
+@utility label-mono {
+  @apply font-mono text-[11px] font-medium tracking-[0.12em] uppercase;
 }
 
-/* Giorni non applicabili nel calendario */
+/* Giorni non applicabili: tratteggio a mano */
 @utility hatched {
   background-image: repeating-linear-gradient(
     135deg,
     transparent 0 5px,
-    color-mix(in oklab, currentColor 40%, transparent) 5px 7px
+    color-mix(in oklab, currentColor 40%, transparent) 5px 6.5px
   );
 }

@@ -65,7 +65,7 @@ export function LoginPage({ client }: { client: SupabaseClient }) {
         <div className="mb-8 text-center">
           <img src="/favicon.svg" alt="" className="mx-auto mb-4 size-14" />
           <h1 className="text-2xl font-bold tracking-tight">Abitudini</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
             Accedi per ritrovare i tuoi dati su ogni dispositivo.
           </p>
         </div>
@@ -99,11 +99,11 @@ export function LoginPage({ client }: { client: SupabaseClient }) {
               >
                 Ho già un codice
               </Button>
-              <p className="text-center text-xs text-slate-500 dark:text-slate-400">Niente password da ricordare.</p>
+              <p className="text-center text-xs text-ink-500 dark:text-ink-400">Niente password da ricordare.</p>
             </form>
           ) : (
             <form onSubmit={verifyCode} className="space-y-4">
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-ink-600 dark:text-ink-300">
                 {installed ? (
                   <>
                     Scrivi qui il codice che trovi nell'email inviata a <strong>{email}</strong>. Non usare il link:
@@ -150,9 +150,9 @@ export function LoginPage({ client }: { client: SupabaseClient }) {
           )}
         </div>
 
-        <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+        <p className="mt-6 text-center text-sm text-ink-500 dark:text-ink-400">
           Vuoi solo dare un'occhiata?{' '}
-          <a href="/?demo#/oggi" className="font-semibold text-emerald-600 underline-offset-2 hover:underline dark:text-emerald-400">
+          <a href="/?demo#/oggi" className="font-semibold text-accent-600 underline-offset-2 hover:underline dark:text-accent-400">
             Prova la demo senza account
           </a>
         </p>

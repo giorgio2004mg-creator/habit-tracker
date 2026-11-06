@@ -141,7 +141,7 @@ export function HabitForm({ habit, onClose }: { habit?: Habit; onClose: () => vo
         </Field>
 
         <div>
-          <span className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Colore</span>
+          <span className="mb-1.5 block text-sm font-medium text-ink-700 dark:text-ink-300">Colore</span>
           <div className="flex flex-wrap gap-2">
             {HABIT_COLORS.map((c) => (
               <button
@@ -152,7 +152,7 @@ export function HabitForm({ habit, onClose }: { habit?: Habit; onClose: () => vo
                 aria-pressed={draft.color === c}
                 className={cx(
                   'size-8 rounded-full transition',
-                  draft.color === c && 'ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-950',
+                  draft.color === c && 'ring-2 ring-offset-2 ring-offset-ink-50 dark:ring-offset-ink-950',
                 )}
                 style={{ backgroundColor: c, '--tw-ring-color': c } as CSSProperties}
               />
@@ -161,7 +161,7 @@ export function HabitForm({ habit, onClose }: { habit?: Habit; onClose: () => vo
         </div>
 
         <div>
-          <span className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Icona</span>
+          <span className="mb-1.5 block text-sm font-medium text-ink-700 dark:text-ink-300">Icona</span>
           <div className="grid grid-cols-8 gap-1.5 sm:grid-cols-12">
             {ICONS.map((i) => (
               <button
@@ -171,7 +171,7 @@ export function HabitForm({ habit, onClose }: { habit?: Habit; onClose: () => vo
                 aria-pressed={draft.icon === i}
                 className={cx(
                   'flex aspect-square items-center justify-center rounded-xl text-xl transition',
-                  draft.icon === i ? 'bg-slate-200 dark:bg-slate-700' : 'hover:bg-slate-100 dark:hover:bg-slate-800',
+                  draft.icon === i ? 'bg-ink-200 dark:bg-ink-700' : 'hover:bg-ink-100 dark:hover:bg-ink-800',
                 )}
               >
                 {i}
@@ -201,7 +201,7 @@ export function HabitForm({ habit, onClose }: { habit?: Habit; onClose: () => vo
         <TypeSettings draft={draft} set={set} />
 
         <div className="space-y-3">
-          <span className="block text-sm font-medium text-slate-700 dark:text-slate-300">Frequenza</span>
+          <span className="block text-sm font-medium text-ink-700 dark:text-ink-300">Frequenza</span>
           <Segmented
             value={draft.frequency.kind}
             onChange={setFreqKind}
@@ -223,7 +223,7 @@ export function HabitForm({ habit, onClose }: { habit?: Habit; onClose: () => vo
                     aria-pressed={active}
                     className={cx(
                       'flex-1 rounded-lg py-2 text-xs font-semibold capitalize transition',
-                      active ? 'text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300',
+                      active ? 'text-white' : 'bg-ink-100 text-ink-600 dark:bg-ink-800 dark:text-ink-300',
                     )}
                     style={active ? { backgroundColor: draft.color } : undefined}
                   >

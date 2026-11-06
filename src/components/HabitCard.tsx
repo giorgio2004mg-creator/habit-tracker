@@ -55,15 +55,15 @@ export function HabitCard({ habit, date }: { habit: Habit; date: ISODate }) {
       <header className="mb-4 flex items-center gap-3">
         <HabitIcon icon={habit.icon} color={habit.color} />
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-[15px] font-semibold sm:text-base">{habit.name}</h3>
-          <p className="flex min-w-0 items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+          <h3 className="truncate text-base font-medium">{habit.name}</h3>
+          <p className="flex min-w-0 items-center gap-2 font-mono text-[11px] text-ink-500 dark:text-ink-400">
             <span className="truncate">{subtitle}</span>
             {streak.current > 0 && (
               <span
-                className="inline-flex shrink-0 items-center gap-0.5 font-semibold text-orange-500 dark:text-orange-400"
+                className="inline-flex shrink-0 items-center gap-0.5 font-medium text-accent-600 dark:text-accent-400"
                 title={`Serie attuale: ${streak.current} ${streak.unit} · record ${streak.best}`}
               >
-                <FlameIcon className="drop-shadow-[0_0_5px_rgb(249_115_22/0.7)]" /> {formatNumber(streak.current)}
+                <FlameIcon /> {formatNumber(streak.current)}
                 {streak.unit === 'settimane' && <span className="font-normal">sett</span>}
               </span>
             )}
@@ -73,7 +73,7 @@ export function HabitCard({ habit, date }: { habit: Habit; date: ISODate }) {
           <IconButton
             label={entry?.na ? 'Annulla non applicabile' : 'Segna come non applicabile'}
             onClick={() => store.setHabitNa(habit, date, !entry?.na)}
-            className={cx(entry?.na && 'text-slate-800 dark:text-slate-100')}
+            className={cx(entry?.na && 'text-ink-800 dark:text-ink-100')}
           >
             <PauseIcon />
           </IconButton>
@@ -94,7 +94,7 @@ export function HabitCard({ habit, date }: { habit: Habit; date: ISODate }) {
                 <CheckIcon />
               </span>
             ) : (
-              <span className="text-[11px] font-semibold text-slate-500 tabular-nums dark:text-slate-400">
+              <span className="font-mono text-[11px] text-ink-500 tabular-nums dark:text-ink-400">
                 {Math.round(progress * 100)}%
               </span>
             )}
@@ -103,7 +103,7 @@ export function HabitCard({ habit, date }: { habit: Habit; date: ISODate }) {
       </header>
 
       {na ? (
-        <div className="flex items-center justify-between gap-2 rounded-2xl bg-slate-100 px-3 py-2 text-sm text-slate-600 dark:bg-white/5 dark:text-slate-300">
+        <div className="flex items-center justify-between gap-2 rounded-full bg-ink-900/5 px-4 py-2 text-sm text-ink-600 dark:bg-white/5 dark:text-ink-300">
           <span>Non applicabile {dayNa ? 'per tutta la giornata' : 'in questo giorno'}</span>
           {!dayNa && (
             <Button variant="ghost" className="py-1" onClick={() => store.setHabitNa(habit, date, false)}>
