@@ -57,8 +57,8 @@ export function SettingsPage() {
           <section className="card p-4">
             <SectionTitle>Account</SectionTitle>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="min-w-0 text-sm text-slate-600 dark:text-slate-400">
-                Collegato come <strong className="break-all text-slate-900 dark:text-slate-100">{auth.email}</strong>
+              <p className="min-w-0 text-sm text-ink-600 dark:text-ink-400">
+                Collegato come <strong className="break-all text-ink-900 dark:text-ink-100">{auth.email}</strong>
               </p>
               <Button
                 onClick={() => {
@@ -86,7 +86,7 @@ export function SettingsPage() {
 
         <section className="card p-4">
           <SectionTitle>Backup dei dati</SectionTitle>
-          <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mb-4 text-sm text-ink-600 dark:text-ink-400">
             {auth
               ? `I dati sono sincronizzati con il tuo account (${store.data.habits.length} abitudini, ${entriesCount} registrazioni). Esporta un file JSON per avere una copia di sicurezza.`
               : `I dati sono salvati solo su questo dispositivo (${store.data.habits.length} abitudini, ${entriesCount} registrazioni). Esporta un file JSON per fare un backup o spostarli su un altro dispositivo.`}
@@ -105,7 +105,7 @@ export function SettingsPage() {
               role="status"
               className={
                 message.kind === 'ok'
-                  ? 'mt-3 text-sm text-emerald-600 dark:text-emerald-400'
+                  ? 'mt-3 text-sm text-accent-600 dark:text-accent-400'
                   : 'mt-3 text-sm text-red-600 dark:text-red-400'
               }
             >
@@ -116,7 +116,7 @@ export function SettingsPage() {
 
         <section className="card p-4">
           <SectionTitle>Zona pericolosa</SectionTitle>
-          <p className="mb-3 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mb-3 text-sm text-ink-600 dark:text-ink-400">
             Elimina tutte le registrazioni e ripristina le abitudini iniziali.
           </p>
           <Button variant="danger" onClick={reset}>
@@ -124,7 +124,7 @@ export function SettingsPage() {
           </Button>
         </section>
 
-        <p className="text-center text-xs text-slate-400">Abitudini · v{__APP_VERSION__}</p>
+        <p className="text-center text-xs text-ink-400">Abitudini · v{__APP_VERSION__}</p>
       </div>
     </>
   )

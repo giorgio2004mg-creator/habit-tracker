@@ -18,9 +18,9 @@ export function StatusDot({ status, color }: { status: DayStatus; color: string 
     <span
       className={cx(
         'inline-block size-5 rounded-md',
-        status === 'empty' && 'bg-slate-100 dark:bg-slate-800',
+        status === 'empty' && 'bg-ink-100 dark:bg-ink-800',
         status === 'missed' && 'border-2 border-red-300 dark:border-red-500/50',
-        status === 'na' && 'hatched bg-slate-100 text-slate-500 dark:bg-slate-800',
+        status === 'na' && 'hatched bg-ink-100 text-ink-500 dark:bg-ink-800',
       )}
       style={
         status === 'done'
@@ -46,20 +46,20 @@ function DayCircle({ status, color, future, isToday }: { status: DayStatus; colo
     return <span className={cx(base, 'border-2')} style={{ borderColor: color, backgroundColor: `${color}22` }} />
   if (status === 'missed')
     return (
-      <span className={cx(base, 'border-2 border-red-300/80 text-red-400 dark:border-red-400/40')}>
+      <span className={cx(base, 'border-2 border-accent-300 text-accent-500 dark:border-accent-500/40')}>
         <MinusIcon />
       </span>
     )
-  if (status === 'na') return <span className={cx(base, 'hatched bg-slate-100 text-slate-400 dark:bg-white/5')} />
+  if (status === 'na') return <span className={cx(base, 'hatched bg-ink-100 text-ink-400 dark:bg-white/5')} />
   return (
     <span
       className={cx(
         base,
         future
-          ? 'border-2 border-dashed border-slate-200 dark:border-white/10'
+          ? 'border-2 border-dashed border-ink-300 dark:border-white/10'
           : isToday
-            ? 'border-2 border-slate-400 dark:border-white/50'
-            : 'border-2 border-slate-200 dark:border-white/10',
+            ? 'border-2 border-ink-900 dark:border-white/60'
+            : 'border-2 border-ink-300 dark:border-white/10',
       )}
     />
   )
@@ -75,7 +75,7 @@ export function WeekSummary({ date }: { date: ISODate }) {
     <section className="hcard p-4 sm:p-5">
       <div className="mb-4 flex items-baseline justify-between gap-2">
         <SectionTitle className="mb-0">La tua costanza questa settimana</SectionTitle>
-        <span className="shrink-0 text-xs text-slate-400 dark:text-slate-500">
+        <span className="shrink-0 font-mono text-[11px] text-ink-400 dark:text-ink-500">
           {formatShort(weekStart)} – {formatShort(endOfWeek(date))}
         </span>
       </div>
@@ -87,8 +87,8 @@ export function WeekSummary({ date }: { date: ISODate }) {
               <th
                 key={d}
                 className={cx(
-                  'pb-2 text-center text-[10px] font-semibold tracking-wider uppercase',
-                  d === today ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500',
+                  'pb-2 text-center font-mono text-[10px] tracking-wider uppercase',
+                  d === today ? 'text-accent-600 dark:text-accent-400' : 'text-ink-400 dark:text-ink-500',
                 )}
               >
                 {WEEKDAY_SHORT[i]}
@@ -116,7 +116,7 @@ export function WeekSummary({ date }: { date: ISODate }) {
                     </td>
                   )
                 })}
-                <td className="w-10 pl-1 text-right text-xs text-slate-500 tabular-nums dark:text-slate-400">
+                <td className="w-10 pl-1 text-right text-xs text-ink-500 tabular-nums dark:text-ink-400">
                   {week && `${week.done}/${week.required}`}
                 </td>
               </tr>

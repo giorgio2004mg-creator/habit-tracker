@@ -13,10 +13,11 @@ export { cx }
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-sm',
+  primary:
+    'bg-ink-900 text-white hover:bg-ink-800 active:bg-ink-700 dark:bg-ink-50 dark:text-ink-900 dark:hover:bg-white',
   secondary:
-    'bg-slate-100 text-slate-800 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700',
-  ghost: 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800',
+    'bg-white/70 text-ink-800 hover:bg-white dark:bg-white/[0.06] dark:text-ink-100 dark:hover:bg-white/10',
+  ghost: 'text-ink-600 hover:bg-ink-900/5 dark:text-ink-300 dark:hover:bg-white/5',
   danger: 'bg-red-600 text-white hover:bg-red-700',
 }
 
@@ -29,7 +30,7 @@ export function Button({
     <button
       type="button"
       className={cx(
-        'inline-flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-medium transition select-none disabled:pointer-events-none disabled:opacity-40',
+        'inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition select-none disabled:pointer-events-none disabled:opacity-40',
         VARIANTS[variant],
         className,
       )}
@@ -49,7 +50,7 @@ export function IconButton({
       aria-label={label}
       title={label}
       className={cx(
-        'inline-flex size-9 shrink-0 items-center justify-center rounded-full text-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 disabled:pointer-events-none disabled:opacity-30 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100',
+        'inline-flex size-9 shrink-0 items-center justify-center rounded-full text-lg text-ink-500 transition hover:bg-ink-900/5 hover:text-ink-900 disabled:pointer-events-none disabled:opacity-30 dark:text-ink-400 dark:hover:bg-white/5 dark:hover:text-ink-100',
         className,
       )}
       {...props}
@@ -71,7 +72,7 @@ export function Segmented<T extends string | number>({
   className?: string
 }) {
   return (
-    <div className={cx('flex rounded-xl bg-slate-100 p-1 dark:bg-slate-800', className)} role="radiogroup">
+    <div className={cx('flex rounded-full bg-paper p-1 dark:bg-ink-900', className)} role="radiogroup">
       {options.map((o) => (
         <button
           key={o.value}
@@ -80,11 +81,11 @@ export function Segmented<T extends string | number>({
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
           className={cx(
-            'flex-1 rounded-lg font-medium transition',
+            'flex-1 rounded-full font-medium transition',
             size === 'sm' ? 'px-2 py-1 text-xs' : 'px-3 py-1.5 text-sm',
             value === o.value
-              ? 'bg-white text-slate-900 shadow-sm dark:bg-slate-600 dark:text-white'
-              : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100',
+              ? 'bg-ink-900 text-white dark:bg-ink-50 dark:text-ink-900'
+              : 'text-ink-500 hover:text-ink-800 dark:text-ink-400 dark:hover:text-ink-100',
           )}
         >
           {o.label}
@@ -96,7 +97,7 @@ export function Segmented<T extends string | number>({
 
 export function ProgressBar({ value, color, glow = false }: { value: number; color: string; glow?: boolean }) {
   return (
-    <div className={cx('h-2 rounded-full bg-slate-100', glow ? 'dark:bg-white/[0.07]' : 'overflow-hidden dark:bg-slate-800')}>
+    <div className={cx('h-2 rounded-full bg-ink-900/[0.07] dark:bg-white/[0.07]', !glow && 'overflow-hidden')}>
       <div
         className="h-full rounded-full transition-[width] duration-300"
         style={{
@@ -148,7 +149,7 @@ export function ProgressRing({
           fill="none"
           strokeWidth={stroke}
           strokeDasharray={dashed ? '2 3' : undefined}
-          className="stroke-slate-200 dark:stroke-white/10"
+          className="stroke-ink-900/10 dark:stroke-white/10"
         />
         {v > 0 && (
           <circle
@@ -174,7 +175,7 @@ export function HabitIcon({ icon, color, size = 'md' }: { icon: string; color: s
   return (
     <span
       className={cx(
-        'inline-flex shrink-0 items-center justify-center rounded-xl',
+        'inline-flex shrink-0 items-center justify-center rounded-full',
         size === 'sm' ? 'size-7 text-base' : 'size-10 text-xl',
       )}
       style={{ backgroundColor: `${color}22` }}
@@ -292,10 +293,10 @@ export function NumberInput({
 
 export function PageHeader({ title, subtitle, actions }: { title: string; subtitle?: ReactNode; actions?: ReactNode }) {
   return (
-    <header className="mb-5 flex items-end justify-between gap-3">
+    <header className="mb-6 flex items-end justify-between gap-3">
       <div className="min-w-0">
-        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-        {subtitle && <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{subtitle}</p>}
+        <h1 className="font-serif text-[40px] leading-none tracking-tight italic sm:text-5xl">{title}</h1>
+        {subtitle && <p className="label-mono mt-2 text-ink-500 dark:text-ink-400">{subtitle}</p>}
       </div>
       {actions && <div className="flex shrink-0 items-center gap-1">{actions}</div>}
     </header>
@@ -303,24 +304,15 @@ export function PageHeader({ title, subtitle, actions }: { title: string; subtit
 }
 
 export function SectionTitle({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <h2
-      className={cx(
-        'mb-2 text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400',
-        className,
-      )}
-    >
-      {children}
-    </h2>
-  )
+  return <h2 className={cx('label-mono mb-2 text-ink-500 dark:text-ink-400', className)}>{children}</h2>
 }
 
 export function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">{label}</span>
+      <span className="mb-1 block text-sm font-medium text-ink-700 dark:text-ink-300">{label}</span>
       {children}
-      {hint && <span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">{hint}</span>}
+      {hint && <span className="mt-1 block text-xs text-ink-500 dark:text-ink-400">{hint}</span>}
     </label>
   )
 }

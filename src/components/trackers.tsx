@@ -27,10 +27,10 @@ export function CheckTracker({ habit, data, onChange }: TrackerProps<'check'>) {
         onClick={() => update({ done: !done, note: data?.note })}
         aria-pressed={done}
         className={cx(
-          'inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold transition',
+          'inline-flex shrink-0 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition',
           done
             ? 'text-white'
-            : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-white/[0.06] dark:text-slate-200 dark:hover:bg-white/10',
+            : 'bg-ink-900/[0.06] text-ink-700 hover:bg-ink-900/10 dark:bg-white/[0.06] dark:text-ink-200 dark:hover:bg-white/10',
         )}
         style={done ? { backgroundColor: habit.color, boxShadow: `0 4px 18px -4px ${habit.color}aa` } : undefined}
       >
@@ -57,10 +57,10 @@ export function QuantityTracker({ habit, data, onChange }: TrackerProps<'quantit
     <div className="space-y-3">
       <div className="flex items-baseline justify-between text-sm">
         <span>
-          <span className="text-3xl font-bold tracking-tight tabular-nums" style={{ color: habit.color }}>
+          <span className="text-[44px] leading-none font-light tracking-tight tabular-nums" style={{ color: habit.color }}>
             {formatNumber(value)}
           </span>
-          <span className="text-base font-medium text-slate-400 dark:text-slate-500">
+          <span className="font-mono text-sm text-ink-500 dark:text-ink-400">
             {habit.target ? ` / ${formatNumber(habit.target)}` : ''} {unit}
           </span>
         </span>
@@ -71,7 +71,7 @@ export function QuantityTracker({ habit, data, onChange }: TrackerProps<'quantit
           label={`Togli ${formatNumber(step)} ${unit}`}
           onClick={() => set(value - step)}
           disabled={value <= 0}
-          className="bg-slate-100 dark:bg-white/[0.06]"
+          className="bg-ink-900/[0.06] dark:bg-white/[0.06]"
         >
           <MinusIcon />
         </IconButton>
@@ -84,7 +84,7 @@ export function QuantityTracker({ habit, data, onChange }: TrackerProps<'quantit
         />
         <Button
           variant="primary"
-          className="flex-1 rounded-2xl py-2.5"
+          className="flex-1 py-2.5"
           onClick={() => set(value + step)}
           style={{ backgroundColor: habit.color, boxShadow: `0 4px 18px -6px ${habit.color}aa` }}
         >
@@ -122,7 +122,7 @@ export function DurationTracker({ habit, data, onChange }: TrackerProps<'durata'
             aria-label="Minuti"
             placeholder="0"
           />
-          <span className="text-sm text-slate-500 dark:text-slate-400">min</span>
+          <span className="text-sm text-ink-500 dark:text-ink-400">min</span>
         </div>
         <div className="flex gap-1.5">
           {[15, 30, 60].map((m) => (
@@ -132,8 +132,8 @@ export function DurationTracker({ habit, data, onChange }: TrackerProps<'durata'
           ))}
         </div>
         {minutes > 0 && (
-          <span className="ml-auto text-sm text-slate-400 dark:text-slate-500">
-            <span className="text-lg font-bold tabular-nums" style={{ color: habit.color }}>
+          <span className="ml-auto text-sm text-ink-400 dark:text-ink-500">
+            <span className="text-2xl font-light tabular-nums" style={{ color: habit.color }}>
               {formatMinutes(minutes)}
             </span>
             {habit.target ? ` / ${formatMinutes(habit.target)}` : ''}
@@ -169,7 +169,7 @@ export function SleepTracker({ habit, data, onChange }: TrackerProps<'sonno'>) {
     <div className="space-y-3">
       <div className="grid grid-cols-2 gap-3">
         <label className="block">
-          <span className="mb-1 block text-xs text-slate-500 dark:text-slate-400">A letto (sera prima)</span>
+          <span className="mb-1 block text-xs text-ink-500 dark:text-ink-400">A letto (sera prima)</span>
           <input
             type="time"
             className="field"
@@ -178,7 +178,7 @@ export function SleepTracker({ habit, data, onChange }: TrackerProps<'sonno'>) {
           />
         </label>
         <label className="block">
-          <span className="mb-1 block text-xs text-slate-500 dark:text-slate-400">Sveglia</span>
+          <span className="mb-1 block text-xs text-ink-500 dark:text-ink-400">Sveglia</span>
           <input
             type="time"
             className="field"
@@ -190,10 +190,10 @@ export function SleepTracker({ habit, data, onChange }: TrackerProps<'sonno'>) {
       {minutes !== null && (
         <div className="space-y-1.5">
           <div className="flex items-baseline justify-between text-sm">
-            <span className="text-lg font-bold tabular-nums" style={{ color: habit.color }}>
+            <span className="text-2xl font-light tabular-nums" style={{ color: habit.color }}>
               {formatMinutes(minutes)}
             </span>
-            <span className="text-slate-500 dark:text-slate-400">obiettivo {formatNumber(target)} h</span>
+            <span className="text-ink-500 dark:text-ink-400">obiettivo {formatNumber(target)} h</span>
           </div>
           <ProgressBar value={progressOf(habit, data)} color={habit.color} glow />
         </div>
@@ -227,7 +227,7 @@ export function MealsTracker({ habit, data, onChange }: TrackerProps<'pasti'>) {
   }
 
   return (
-    <ul className="divide-y divide-slate-100 dark:divide-white/[0.06]">
+    <ul className="divide-y divide-ink-900/[0.07] dark:divide-white/[0.06]">
       {MEAL_SLOTS.map((slot) => {
         const log = meals[slot]
         const expanded = open === slot && !!log
@@ -246,8 +246,8 @@ export function MealsTracker({ habit, data, onChange }: TrackerProps<'pasti'>) {
                 <span>{MEAL_LABELS[slot]}</span>
                 {log && (
                   <>
-                    <ChevronDown className={cx('shrink-0 text-slate-400 transition', expanded && 'rotate-180')} />
-                    <span className="truncate text-xs font-normal text-slate-500 dark:text-slate-400">
+                    <ChevronDown className={cx('shrink-0 text-ink-400 transition', expanded && 'rotate-180')} />
+                    <span className="truncate text-xs font-normal text-ink-500 dark:text-ink-400">
                       {[log.food, log.portion].filter(Boolean).join(' · ')}
                     </span>
                   </>
@@ -258,10 +258,10 @@ export function MealsTracker({ habit, data, onChange }: TrackerProps<'pasti'>) {
                 onClick={() => toggleStatus('fatto')}
                 aria-pressed={log?.status === 'fatto'}
                 className={cx(
-                  'inline-flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-semibold transition',
+                  'inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition',
                   log?.status === 'fatto'
                     ? 'text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:bg-white/10',
+                    : 'bg-ink-900/[0.06] text-ink-600 hover:bg-ink-900/10 dark:bg-white/[0.06] dark:text-ink-300 dark:hover:bg-white/10',
                 )}
                 style={log?.status === 'fatto' ? { backgroundColor: habit.color } : undefined}
               >
@@ -272,10 +272,10 @@ export function MealsTracker({ habit, data, onChange }: TrackerProps<'pasti'>) {
                 onClick={() => toggleStatus('saltato')}
                 aria-pressed={log?.status === 'saltato'}
                 className={cx(
-                  'inline-flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-semibold transition',
+                  'inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition',
                   log?.status === 'saltato'
-                    ? 'bg-slate-600 text-white dark:bg-slate-500'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:bg-white/10',
+                    ? 'bg-ink-900 text-white dark:bg-ink-50 dark:text-ink-900'
+                    : 'bg-ink-900/[0.06] text-ink-600 hover:bg-ink-900/10 dark:bg-white/[0.06] dark:text-ink-300 dark:hover:bg-white/10',
                 )}
               >
                 <XIcon /> Saltato

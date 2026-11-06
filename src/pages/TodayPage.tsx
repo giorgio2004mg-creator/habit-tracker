@@ -21,7 +21,7 @@ import { dayCompletion, overallRate, ratio } from '../lib/stats'
 import { type Streak, computeStreak } from '../lib/streak'
 import { useStore } from '../state/store'
 
-const ACCENT = '#10b981'
+const ACCENT = '#ff4f1f'
 
 function eyebrow(date: ISODate, today: ISODate) {
   const n = diffDays(date, today)
@@ -30,35 +30,38 @@ function eyebrow(date: ISODate, today: ISODate) {
   return `${n} giorni fa`
 }
 
-/** Riquadro di riepilogo: etichetta con icona, numero grande colorato, riga sotto. */
+type TileTone = 'accent' | 'paper' | 'ink'
+
+const TONES: Record<TileTone, string> = {
+  accent: 'rounded-[28px] bg-accent-500 text-white',
+  paper: 'rounded-[28px] bg-paper dark:bg-ink-900',
+  ink: 'aspect-square rounded-full bg-ink-900 text-white dark:bg-ink-50 dark:text-ink-900 items-center justify-center text-center',
+}
+
+/** Riquadro di riepilogo: etichetta mono, numero grande sottile, riga sotto. */
 function StatTile({
   label,
   Icon,
   value,
-  color,
-  glow,
+  tone,
   foot,
 }: {
   label: string
   Icon: ComponentType<SVGProps<SVGSVGElement>>
   value: ReactNode
-  color: string
-  glow?: boolean
+  tone: TileTone
   foot: ReactNode
 }) {
   return (
-    <div className="hcard flex min-w-0 flex-col p-3.5 sm:p-5">
-      <p className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 sm:text-xs dark:text-slate-400">
-        <Icon className="shrink-0 text-sm" style={{ color }} />
+    <div className={cx('flex min-w-0 flex-col p-3.5 sm:p-5', TONES[tone])}>
+      <p className={cx('label-mono flex items-center gap-1.5 text-[10px] tracking-[0.08em] sm:text-[11px] sm:tracking-[0.12em]', tone === 'paper' && 'text-ink-500 dark:text-ink-400')}>
+        <Icon className={cx('hidden shrink-0 text-sm sm:inline', tone === 'ink' && 'text-accent-500')} />
         <span className="truncate">{label}</span>
       </p>
-      <p
-        className="mt-2 mb-2 text-[28px] leading-none font-bold tracking-tight tabular-nums sm:mt-3 sm:text-4xl"
-        style={{ color, textShadow: glow ? `0 0 18px ${color}66` : undefined }}
-      >
-        {value}
-      </p>
-      <div className="mt-auto min-w-0 truncate text-[11px] text-slate-500 sm:text-xs dark:text-slate-400">{foot}</div>
+      <p className="my-2 text-[34px] leading-none font-light tracking-tight tabular-nums sm:my-3 sm:text-5xl">{value}</p>
+      <div className={cx('min-w-0 truncate text-[11px] sm:text-xs', tone !== 'ink' && 'mt-auto', tone === 'paper' && 'text-ink-500 dark:text-ink-400', tone !== 'paper' && 'opacity-75')}>
+        {foot}
+      </div>
     </div>
   )
 }
@@ -88,10 +91,10 @@ export function TodayPage() {
       <header className="mb-5">
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-semibold tracking-[0.18em] text-emerald-600 uppercase dark:text-emerald-400">
+            <p className="label-mono inline-flex rounded-full bg-ink-900 px-3 py-1 text-white dark:bg-ink-50 dark:text-ink-900">
               {eyebrow(date, today)}
             </p>
-            <h1 className="mt-1 truncate text-[26px] leading-tight font-bold tracking-tight sm:text-3xl">
+            <h1 className="mt-3 truncate font-serif text-[34px] leading-none italic sm:text-5xl">
               {capitalize(formatLong(date))}
             </h1>
           </div>
@@ -129,20 +132,22 @@ export function TodayPage() {
                 aria-pressed={selected}
                 aria-label={capitalize(formatLong(d))}
                 className={cx(
-                  'flex flex-col items-center gap-1.5 rounded-2xl py-2 transition disabled:cursor-default',
+                  'flex flex-col items-center gap-1.5 rounded-[20px] py-2 transition disabled:cursor-default',
                   selected
-                    ? 'bg-emerald-500/10 ring-1 ring-emerald-500/30 ring-inset'
-                    : 'hover:bg-slate-100 dark:hover:bg-white/5',
+                    ? 'bg-ink-900 text-white dark:bg-ink-50 dark:text-ink-900'
+                    : 'hover:bg-ink-900/5 dark:hover:bg-white/5',
                 )}
               >
                 <span
                   className={cx(
-                    'text-[10px] font-semibold tracking-wider uppercase',
-                    d === today
-                      ? 'text-emerald-600 dark:text-emerald-400'
+                    'font-mono text-[10px] tracking-wider uppercase',
+                    selected
+                      ? 'opacity-70'
+                      : d === today
+                        ? 'text-accent-600 dark:text-accent-400'
                       : future
-                        ? 'text-slate-300 dark:text-slate-600'
-                        : 'text-slate-500 dark:text-slate-400',
+                        ? 'text-ink-300 dark:text-ink-600'
+                          : 'text-ink-500 dark:text-ink-400',
                   )}
                 >
                   {WEEKDAY_SHORT[i]}
@@ -151,8 +156,8 @@ export function TodayPage() {
                   <span
                     className={cx(
                       'text-sm font-semibold tabular-nums',
-                      future && 'text-slate-300 dark:text-slate-600',
-                      d === today && 'text-emerald-600 dark:text-emerald-400',
+                      future && 'text-ink-300 dark:text-ink-600',
+                      d === today && !selected && 'text-accent-600 dark:text-accent-400',
                     )}
                   >
                     {fromISO(d).getDate()}
@@ -166,35 +171,34 @@ export function TodayPage() {
 
       <div className="mb-6 grid grid-cols-3 gap-2.5 sm:gap-3">
         <StatTile
-          label={isToday ? 'Fatte oggi' : 'Fatte'}
+          label="Fatte"
           Icon={CheckIcon}
-          color={ACCENT}
+          tone="accent"
           value={
             due.length > 0 ? (
               <>
                 {done}
-                <span className="text-lg text-slate-400 sm:text-xl dark:text-slate-500">/{due.length}</span>
+                <span className="text-lg opacity-60 sm:text-2xl">/{due.length}</span>
               </>
             ) : (
               '—'
             )
           }
-          foot={due.length > 0 ? <ProgressBar value={done / due.length} color={ACCENT} glow /> : 'Niente da fare'}
+          foot={due.length > 0 ? <ProgressBar value={done / due.length} color="#ffffff" /> : 'Niente da fare'}
         />
         <StatTile
           label="Settimana"
           Icon={ChartIcon}
-          color="#8b5cf6"
+          tone="paper"
           value={weekRate === null ? '—' : formatPercent(weekRate)}
           foot="costanza"
         />
         <StatTile
           label="Serie"
           Icon={FlameIcon}
-          color="#f97316"
-          glow={!!top}
+          tone="ink"
           value={top ? formatNumber(top.streak.current) : '0'}
-          foot={top ? `${top.streak.unit} · ${top.name}` : 'Inizia oggi'}
+          foot={top ? top.streak.unit : 'inizia oggi'}
         />
       </div>
 

@@ -1,7 +1,7 @@
 // Service worker: tiene in cache l'app così si apre anche senza connessione.
 // I dati (Supabase) non passano da qui: li gestisce l'app con la sua coda offline.
 
-const CACHE = 'abitudini-v1'
+const CACHE = 'abitudini-v2'
 const SHELL = ['/', '/manifest.webmanifest', '/favicon.svg', '/icons/icon-192.png']
 
 const put = (key, response) => caches.open(CACHE).then((cache) => cache.put(key, response))

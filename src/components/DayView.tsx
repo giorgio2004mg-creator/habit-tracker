@@ -20,8 +20,8 @@ export function DayView({ date }: { date: ISODate }) {
 
   if (store.habits.length === 0) {
     return (
-      <div className="hcard p-6 text-center text-sm text-slate-500 dark:text-slate-400">
-        Nessuna abitudine attiva. <a href="#/abitudini" className="font-medium text-emerald-600 underline">Creane una</a>.
+      <div className="hcard p-6 text-center text-sm text-ink-500 dark:text-ink-400">
+        Nessuna abitudine attiva. <a href="#/abitudini" className="font-medium text-accent-600 underline">Creane una</a>.
       </div>
     )
   }
@@ -29,11 +29,11 @@ export function DayView({ date }: { date: ISODate }) {
   return (
     <div className="space-y-6">
       {naDay && (
-        <div className="flex items-center gap-3 rounded-3xl bg-slate-200/70 px-4 py-3 text-sm dark:bg-white/[0.06]">
-          <PauseIcon className="shrink-0 text-xl text-slate-500" />
+        <div className="flex items-center gap-3 rounded-[28px] bg-paper px-4 py-3 text-sm dark:bg-ink-900">
+          <PauseIcon className="shrink-0 text-xl text-ink-500" />
           <div className="flex-1">
             <p className="font-semibold">Giornata non applicabile{naDay.note ? ` · ${naDay.note}` : ''}</p>
-            <p className="text-slate-500 dark:text-slate-400">Non interrompe le serie e non conta nelle percentuali.</p>
+            <p className="text-ink-500 dark:text-ink-400">Non interrompe le serie e non conta nelle percentuali.</p>
           </div>
           <Button variant="ghost" onClick={() => store.setDayNa(date, false)}>
             Annulla
@@ -46,7 +46,7 @@ export function DayView({ date }: { date: ISODate }) {
           <HabitCard key={h.id} habit={h} date={date} />
         ))}
         {due.length === 0 && (
-          <p className="hcard p-5 text-center text-sm text-slate-500 dark:text-slate-400">
+          <p className="hcard p-5 text-center text-sm text-ink-500 dark:text-ink-400">
             Nessuna abitudine prevista per questo giorno.
           </p>
         )}
@@ -61,7 +61,7 @@ export function DayView({ date }: { date: ISODate }) {
             aria-expanded={showOthers}
           >
             <SectionTitle className="mb-0">Non previste oggi ({others.length})</SectionTitle>
-            <ChevronDown className={cx('text-slate-400 transition', showOthers && 'rotate-180')} />
+            <ChevronDown className={cx('text-ink-400 transition', showOthers && 'rotate-180')} />
           </button>
           {showOthers && (
             <div className="mt-3 space-y-3">
@@ -77,7 +77,7 @@ export function DayView({ date }: { date: ISODate }) {
         <div className="text-center">
           {askReason ? (
             <div className="hcard inline-flex flex-wrap items-center justify-center gap-2 p-3">
-              <span className="text-sm text-slate-600 dark:text-slate-300">Motivo:</span>
+              <span className="text-sm text-ink-600 dark:text-ink-300">Motivo:</span>
               {NA_REASONS.map((r) => (
                 <Button
                   key={r}
