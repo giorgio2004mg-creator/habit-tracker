@@ -1,9 +1,8 @@
-import { type ISODate, WEEKDAY_LETTERS, addDays, endOfWeek, startOfWeek } from '../lib/dates'
-import { formatPercent } from '../lib/format'
+import { type ISODate, WEEKDAY_SHORT, addDays, endOfWeek, formatShort, startOfWeek } from '../lib/dates'
 import { type DayStatus, dayStatus } from '../lib/progress'
-import { overallRate, ratio } from '../lib/stats'
 import { weekResult } from '../lib/streak'
 import { useStore } from '../state/store'
+import { CheckIcon, MinusIcon } from './icons'
 import { HabitIcon, SectionTitle, cx } from './ui'
 
 const STATUS_LABEL: Record<DayStatus, string> = {
@@ -34,19 +33,50 @@ export function StatusDot({ status, color }: { status: DayStatus; color: string 
   )
 }
 
-/** "La tua costanza questa settimana": percentuale complessiva e griglia lun–dom. */
+/** Cerchio di un giorno nel riepilogo della home: pieno, parziale, mancato, futuro. */
+function DayCircle({ status, color, future, isToday }: { status: DayStatus; color: string; future: boolean; isToday: boolean }) {
+  const base = 'inline-flex size-7 items-center justify-center rounded-full text-sm sm:size-8'
+  if (status === 'done')
+    return (
+      <span className={cx(base, 'text-white')} style={{ backgroundColor: color, boxShadow: `0 0 10px ${color}55` }}>
+        <CheckIcon />
+      </span>
+    )
+  if (status === 'partial')
+    return <span className={cx(base, 'border-2')} style={{ borderColor: color, backgroundColor: `${color}22` }} />
+  if (status === 'missed')
+    return (
+      <span className={cx(base, 'border-2 border-red-300/80 text-red-400 dark:border-red-400/40')}>
+        <MinusIcon />
+      </span>
+    )
+  if (status === 'na') return <span className={cx(base, 'hatched bg-slate-100 text-slate-400 dark:bg-white/5')} />
+  return (
+    <span
+      className={cx(
+        base,
+        future
+          ? 'border-2 border-dashed border-slate-200 dark:border-white/10'
+          : isToday
+            ? 'border-2 border-slate-400 dark:border-white/50'
+            : 'border-2 border-slate-200 dark:border-white/10',
+      )}
+    />
+  )
+}
+
+/** "La tua costanza questa settimana": un cerchio per abitudine e per giorno, lun–dom. */
 export function WeekSummary({ date }: { date: ISODate }) {
   const { data: app, habits, today } = useStore()
   const weekStart = startOfWeek(date)
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
-  const rate = ratio(overallRate(app, habits, weekStart, endOfWeek(date), today))
 
   return (
-    <section className="card p-4">
-      <div className="mb-3 flex items-baseline justify-between">
+    <section className="hcard p-4 sm:p-5">
+      <div className="mb-4 flex items-baseline justify-between gap-2">
         <SectionTitle className="mb-0">La tua costanza questa settimana</SectionTitle>
-        <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-          {rate === null ? '—' : formatPercent(rate)}
+        <span className="shrink-0 text-xs text-slate-400 dark:text-slate-500">
+          {formatShort(weekStart)} – {formatShort(endOfWeek(date))}
         </span>
       </div>
       <table className="w-full text-sm">
@@ -57,11 +87,11 @@ export function WeekSummary({ date }: { date: ISODate }) {
               <th
                 key={d}
                 className={cx(
-                  'pb-1 text-center text-xs font-medium text-slate-400',
-                  d === today && 'text-emerald-600 dark:text-emerald-400',
+                  'pb-2 text-center text-[10px] font-semibold tracking-wider uppercase',
+                  d === today ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500',
                 )}
               >
-                {WEEKDAY_LETTERS[i]}
+                {WEEKDAY_SHORT[i]}
               </th>
             ))}
             <th className="sr-only">Settimana</th>
@@ -72,7 +102,7 @@ export function WeekSummary({ date }: { date: ISODate }) {
             const week = h.frequency.kind === 'weekly' ? weekResult(app, h, weekStart, today) : null
             return (
               <tr key={h.id}>
-                <td className="py-1 pr-2">
+                <td className="py-1.5 pr-2">
                   <span className="flex items-center gap-2">
                     <HabitIcon icon={h.icon} color={h.color} size="sm" />
                     <span className="hidden truncate sm:inline">{h.name}</span>
@@ -81,8 +111,8 @@ export function WeekSummary({ date }: { date: ISODate }) {
                 {days.map((d) => {
                   const s = dayStatus(app, h, d, today)
                   return (
-                    <td key={d} className="text-center" title={`${h.name} · ${STATUS_LABEL[s]}`}>
-                      <StatusDot status={s} color={h.color} />
+                    <td key={d} className="py-1.5 text-center" title={`${h.name} · ${STATUS_LABEL[s]}`}>
+                      <DayCircle status={s} color={h.color} future={d > today} isToday={d === today} />
                     </td>
                   )
                 })}
