@@ -5,12 +5,15 @@ App personale per tracciare abitudini, sonno e pasti. Pensata per il telefono, c
 **Prova la demo, senza account:** https://habit-tracker-eta-three-88.vercel.app/?demo
 
 <p>
-  <img src="docs/screenshots/oggi-chiaro.png" alt="Pagina Oggi con il check-in delle abitudini" width="250">
-  <img src="docs/screenshots/calendario.png" alt="Calendario del mese con i giorni completati" width="250">
-  <img src="docs/screenshots/statistiche.png" alt="Statistiche settimanali" width="250">
+  <img src="docs/screenshots/oggi-chiaro.png" alt="Pagina Oggi: settimana ad anelli, riepilogo e check-in delle abitudini" width="185">
+  <img src="docs/screenshots/calendario.png" alt="Calendario del mese con i giorni a cerchio" width="185">
+  <img src="docs/screenshots/statistiche.png" alt="Statistiche con la percentuale a puntini" width="185">
+  <img src="docs/screenshots/oggi-scuro.png" alt="Pagina Oggi in tema scuro" width="185">
 </p>
 
 <img src="docs/screenshots/desktop.png" alt="Statistiche su desktop" width="770">
+
+**Stile "strumento di misura"**: grigio caldo, nero inchiostro e un solo accento arancio; etichette monospaziate, titoli in corsivo con grazie e numeri giganti a puntini come un display. Il logo è una spunta disegnata a penna.
 
 ## Funzionalità
 
@@ -26,8 +29,8 @@ App personale per tracciare abitudini, sonno e pasti. Pensata per il telefono, c
 - **Frequenze** — ogni giorno, giorni specifici della settimana, oppure X volte a settimana.
 - **Giorni non applicabili** — per una singola abitudine o per tutta la giornata (vacanza, malattia): non interrompono la serie e non contano nelle percentuali.
 - **Streak** — serie attuale e record; in settimane per le abitudini "X volte a settimana".
-- **Calendario** — vista mensile complessiva o per abitudine; tocca un giorno per vedere e modificare i dati.
-- **Statistiche** — completamento settimanale/mensile, media del sonno, media dell'acqua, minuti di studio, grafici dell'andamento.
+- **Calendario** — vista mensile complessiva o per abitudine, con i giorni a cerchio che si riempiono come una torta e il riepilogo del mese; tocca un giorno per vedere e modificare i dati.
+- **Statistiche** — completamento settimanale/mensile, media del sonno, media dell'acqua, ore di studio, serie in corso e record, grafici dell'andamento e una lancetta per ogni abitudine.
 - **Account e sincronizzazione** — accesso via email senza password (link o codice), dati sincronizzati tra telefono e computer.
 - **Installabile e offline** — si aggiunge alla schermata Home; senza connessione si apre lo stesso e le modifiche partono appena torna la rete.
 - **Demo** — dati di esempio verosimili, senza account (`/?demo`).
@@ -37,6 +40,8 @@ App personale per tracciare abitudini, sonno e pasti. Pensata per il telefono, c
 ## Stack
 
 React 19 · TypeScript · Vite · Tailwind CSS 4 · Recharts · Supabase (Auth + Postgres con Row Level Security) · Vercel · Vitest
+
+Caratteri inclusi nel progetto (funzionano anche offline): DM Mono, Doto, Instrument Serif. Colori e caratteri sono definiti una volta sola in [`src/index.css`](src/index.css).
 
 ## Avvio
 
@@ -116,4 +121,5 @@ Le date sono stringhe locali `YYYY-MM-DD`: si confrontano come testo e non risen
 - [x] **Fase 1** — app completa con dati locali, export/import JSON
 - [x] **Fase 2** — login e sincronizzazione con Supabase, pubblicazione su Vercel
 - [x] **Fase 3** — PWA installabile, uso offline, demo, screenshot
+- [x] **Fase 4** — nuova grafica partendo da screenshot di riferimento (image-to-code) e nuovo logo
 - [ ] **Promemoria** — notifiche push a un orario scelto (richiedono un invio programmato lato server)
