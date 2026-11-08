@@ -94,7 +94,7 @@ export function TodayPage() {
             <p className="label-mono inline-flex rounded-full bg-ink-900 px-3 py-1 text-white dark:bg-ink-50 dark:text-ink-900">
               {eyebrow(date, today)}
             </p>
-            <h1 className="mt-3 truncate font-serif text-[34px] leading-none italic sm:text-5xl">
+            <h1 className="mt-3 font-serif text-[30px] leading-[0.95] text-balance italic sm:text-5xl">
               {capitalize(formatLong(date))}
             </h1>
           </div>
